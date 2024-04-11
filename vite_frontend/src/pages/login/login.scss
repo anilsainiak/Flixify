@@ -1,0 +1,134 @@
+.login{
+    width: 100vw;
+    height: 100vh;
+    background:linear-gradient(
+        to bottom, 
+        rgba(0,0,0,0)45%,
+        rgba(0,0,0,1)100%),
+        linear-gradient(
+        to top, 
+        rgba(0,0,0,0)45%,
+        rgba(0,0,0,1)110%),
+         url("https://assets.nflxext.com/ffe/siteui/vlv3/f85718e8-fc6d-4954-bca0-f5eaf78e0842/ea44b42b-ba19-4f35-ad27-45090e34a897/IN-en-20230918-popsignuptwoweeks-perspective_alpha_website_large.jpg");
+    background-size: cover;
+    position: relative;
+    overflow: hidden;
+    
+    .top{
+        .wrapper{
+            padding: 20px 50px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            .logo{
+                height: 48px;
+                // margin-left: 7vw;
+                margin-top: 1vh;
+            }
+
+            
+        }
+    }
+    
+    .container{
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        left: 0;
+        top: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        transform: translateY(20px);
+        // margin-top: 20px;
+
+        form{
+            width: 300px;
+            height: 510px;
+            padding: 30px 70px 100px 70px;
+            border-radius: 5px;
+            background-color: rgba($color: #000000, $alpha: 0.8);
+            display: flex;
+            justify-content: space-around;
+            flex-direction: column;
+
+            input{
+                height: 40px;
+                border-radius: 5px;
+                background-color:rgb(51, 51,51);
+                color: black;
+
+                &::placeholder{
+                    color:rgb(158, 156, 156);
+                    text-indent: 10px;
+                    font-family: sans-serif;
+                    font-size: 17px;
+                }
+            }
+
+            button{
+                height: 40px;
+                background-color: red;
+                border-radius: 5px;
+                border: none;
+                color: white;
+                font-size: 18px;
+                font-weight: 500;
+                cursor: pointer;
+            }
+
+            .wrapper{
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                top: 0;
+                left: 0;
+                transform: translateY(-18px);
+                color: rgb(183, 183, 183);
+
+
+                .rememberMe{
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+
+                    input{
+                        cursor: pointer;
+                    }
+
+                    span{
+                        margin-left: 4px;
+                    }
+                }
+            }
+            
+            .signupLink{
+                color:rgb(111, 110, 110);
+                b{
+                    a{
+                        color: white;
+                        cursor: pointer;
+                        text-decoration: none;
+
+                    }
+                }
+            }
+
+            small{
+                color:rgb(111, 110, 110);
+                b{
+                    a{
+                        text-decoration: none;
+                        cursor: pointer;
+                        color: blue;
+
+                    }
+                }
+            }
+        }
+
+    }
+}
