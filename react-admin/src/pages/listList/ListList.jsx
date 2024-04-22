@@ -65,10 +65,10 @@ export default function ListList() {
         columns={columns}
         initialState={{
           pagination: {
-            paginationModel: { page: 0, pageSize: 8 },
+            paginationModel: { page: 0, pageSize: 10 },
           },
         }}
-        pageSizeOptions={[5, 10]}
+        pageSizeOptions={[5, 10,12,15,20]}
         checkboxSelection
         getRowId={r=>r._id}
       />

@@ -45,23 +45,26 @@ router.get("/", verify, async (req, res) => {
         if (typeQuery) {
             if (genreQuery) {
                 list = await List.aggregate([
-                    { $sample: { size: 10 } },
                     { $match: { type: typeQuery, genre: genreQuery } },
+                    { $sample: { size: 10 } },
                 ]);
             } else {
                 list = await List.aggregate([
-                    { $sample: { size: 10 } },
                     { $match: { type: typeQuery } },
+                    { $sample: { size: 10 } },
                 ]);
             }
         } else {
             if (genreQuery) {
                 list = await List.aggregate([
+                    { $match: { genre: genreQuery } },
                     { $sample: { size: 10 } },
-                    { $match: { genre: genreQuery } }
                 ])
             } else {
-                list = await List.aggregate([{ $sample: { size: 10 } }]);
+                list = await List.aggregate([
+                    {$match:{title:{$regex:'Best',$options:'i'}}},
+                    { $sample: { size: 10 } }
+                ]);
             }
         }
         res.status(200).json(list);
@@ -107,6 +110,9 @@ router.get('/recentlyPlayed', verify, async (req, res, next) => {
     }
     try {
         const response = await RecentlyPlayed.find({ userId: userId }).sort({ updatedAt: -1 }).limit(10);
+        if(response.length===0){
+            return res.status(404).json('new User');
+        }
         response.map(item => {
             result.content.push(item.movieId)
         })

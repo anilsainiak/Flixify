@@ -65,6 +65,7 @@ router.get("/find/:id",verify,async(req,res)=>{
 //GET RANDOM MOVIE
 router.get("/random",verify,async (req,res)=>{
     const type=req.query.type;
+    const genre = req.query.genre;
     let movie;
     try{
         if(type==="series"){
@@ -73,10 +74,17 @@ router.get("/random",verify,async (req,res)=>{
                 {$sample:{size:1}},
             ]);
         }else{
-            movie=await Movie.aggregate([
-                {$match:{isSeries:false}},
-                {$sample:{size:1}},
-            ]);
+            if(genre){
+                movie=await Movie.aggregate([
+                    {$match:{isSeries:false,genre:genre}},
+                    {$sample:{size:1}},
+                ]);
+            }else{
+                movie=await Movie.aggregate([
+                    {$match:{isSeries:false}},
+                    {$sample:{size:1}},
+                ]);
+            }
         }
 
         res.status(200).json(movie);
