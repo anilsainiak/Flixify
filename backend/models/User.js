@@ -1,5 +1,4 @@
 const mongoose=require("mongoose");
-
 const userSchema=new mongoose.Schema(
     {
     username:{type:String,required:true,unique:true},
@@ -12,10 +11,12 @@ const userSchema=new mongoose.Schema(
     newUser:{type:Boolean,default:true},
     pid:{type:Number,default:0},
     resetToken:{type:String},
-    resetTokenExpiration:{type:Date}
+    resetTokenExpiration:{type:Date},
     },
     {timestamps:true}
 );
+
+
 
 
 

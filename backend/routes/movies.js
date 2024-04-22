@@ -89,7 +89,7 @@ router.get("/random",verify,async (req,res)=>{
 router.get("/",verify,async (req,res)=>{
     if(req.user.isAdmin){
         try{
-            const movies=await Movie.find();
+            const movies=await Movie.find().sort({title:1});
             res.status(200).json(movies); 
         }catch(err){
             res.status(500).json(err);
@@ -99,5 +99,13 @@ router.get("/",verify,async (req,res)=>{
     }
 })
 
+// SEARCH MOVIE
+router.get('/search',verify,async(req,res,next)=>{
+    const movie = req.query.searchMovie;
+    const searchResult = await Movie.find({
+        title:{$regex:movie,$options:'i'},
+    })
+    res.status(200).json(searchResult);
+})
 
 module.exports=router;

@@ -1,14 +1,23 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import "./topbar.css";
 import {NotificationsNone,Language,Settings} from '@mui/icons-material';
 import { Link } from 'react-router-dom';
+import Loader from '../../pages/loader/Loader';
 
 export default function Topbar() {
+  const [user,setUser] = useState(null);
+
+  useEffect(()=>{
+    setTimeout(() => {
+      setUser(JSON.parse(localStorage.getItem('user')));
+    }, 100);
+  },[])
   return (
     <div className="topbar">
+      {user ? 
       <div className="topbarWrapper">
         <div className="topLeft">
-          <span className="logo">{(JSON.parse(localStorage.getItem('user'))).username}</span>
+          <span className="logo">{user.username}</span>
         </div>
         <div className="topRight">
           <div className="topbarIconContainer">
@@ -27,6 +36,7 @@ export default function Topbar() {
           </Link>
         </div>
       </div>
+      : <Loader/>}
     </div>
   )
 }

@@ -21,6 +21,18 @@ router.put("/:id",verify, async (req,res)=>{
     }
 })
 
+//UPDATE SCREENS
+router.put("/screen/:id",async(req,res,next)=>{
+    try{
+        const updatedUser = await User.findByIdAndUpdate(req.params.id,{
+            screens:req.body.screens
+        })
+        res.status(200).json(updatedUser)
+    }catch(err){
+        res.status(500).json(err);
+    }
+})
+
 //DELETE
 router.delete("/:id",verify,async (req,res)=>{
     if(req.user.id===req.params.id || req.user.isAdmin){

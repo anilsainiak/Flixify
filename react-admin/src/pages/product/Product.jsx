@@ -6,6 +6,8 @@ import { ProductData } from '../../dummyData'
 import { Publish } from '@mui/icons-material'
 import { MovieContext } from '../../context/movieContext/MovieContext'
 import { updateMovie } from '../../context/movieContext/apiCalls'
+import { AuthContext } from '../../context/authContext/AuthContext'
+import { logoutStart } from '../../context/authContext/apiCalls'
 
 export default function Product() {
     const location=useLocation();
@@ -15,6 +17,8 @@ export default function Product() {
     const [trailer,setTrailer]=useState(movie.trailer);
     const [video,setVideo]=useState(movie.video);
     const {dispatch}=useContext(MovieContext);
+    const {dispatch:authDispatch} = useContext(AuthContext);
+    const [isSuccess,setIsSuccess] = useState(null);
 
     const handleChange=(e)=>{
         const value = e.target.value;
@@ -70,10 +74,19 @@ export default function Product() {
         e.preventDefault();
         handleUpload();
         console.log(updatedMovie);
-        updateMovie(updatedMovie,dispatch);
+        const result = updateMovie(updatedMovie,dispatch);
+        if(result==='success'){
+            setIsSuccess(true);
+        }else if(result==='failure'){
+            setIsSuccess(false);
+        }else if(result===403){
+            logoutStart(authDispatch);
+        }
     }
   return (
-    <div className="product">
+      <div className="product">
+        {isSuccess===true && <Alert severity="success" className='alert'>Movie Updated</Alert> }
+        {isSuccess===false && <Alert severity="error" className='alert'>Failed to update movie</Alert> }
         <div className="productTitleContainer">
             <h1 className="productTitle">Movie</h1>
             <Link to='/newProduct'>

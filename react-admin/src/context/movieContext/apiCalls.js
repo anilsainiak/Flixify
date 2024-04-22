@@ -5,7 +5,7 @@ import axios from 'axios';
 export const getMovies = async (dispatch)=>{
     dispatch(getMoviesStart());
     try{
-        const res=await axios.get('/movie',{
+        const res=await axios.get(process.env.REACT_APP_LINK+'movie',{
             headers:{
                 token:"Bearer "+ JSON.parse(localStorage.getItem("user")).accessToken
             }
@@ -13,7 +13,11 @@ export const getMovies = async (dispatch)=>{
         dispatch(getMoviesSuccess(res.data));
         return res.data
     }catch(err){
-        dispatch(getMoviesFailure());
+        if(err && err.response.status===403){
+            return 403
+        }else{
+            dispatch(getMoviesFailure());
+        }
     }
 }
 
@@ -21,14 +25,18 @@ export const getMovies = async (dispatch)=>{
 export const deleteMovie = async (id,dispatch)=>{
     dispatch(deleteMoviesStart());
     try{
-        await axios.delete('movie/'+id,{
+        await axios.delete(process.env.REACT_APP_LINK+'movie/'+id,{
             headers:{
                 token:"Bearer "+ JSON.parse(localStorage.getItem("user")).accessToken
             }
         })
         dispatch(deleteMoviesSuccess(id));
     }catch(err){
+        if(err && err.response.status===403){
+            return 403
+        }else{
         dispatch(deleteMoviesFailure());
+        }
     }
 }
 
@@ -36,7 +44,7 @@ export const deleteMovie = async (id,dispatch)=>{
 export const createMovie= async (movie,dispatch)=>{
     dispatch(createMovieStart());
     try{
-        const res=await axios.post('movie',movie,{
+        const res=await axios.post(process.env.REACT_APP_LINK+'movie',movie,{
             headers:{
                 token:"Bearer "+ JSON.parse(localStorage.getItem("user")).accessToken
             }
@@ -44,8 +52,12 @@ export const createMovie= async (movie,dispatch)=>{
         dispatch(createMovieSuccess(res.data));
         return 'success';
     }catch(err){
+        if(err && err.response.status===403){
+            return 403
+        }else{
         dispatch(createMovieFailure());
         return 'failure';
+        }
     }
 }
 
@@ -53,13 +65,19 @@ export const createMovie= async (movie,dispatch)=>{
 export const updateMovie= async (movie,dispatch)=>{
     dispatch(updateMovieStart());
     try{
-        const res=await axios.put('/movie/'+movie._id,movie,{
+        const res=await axios.put(process.env.REACT_APP_LINK+'movie/'+movie._id,movie,{
             headers:{
                 token:"Bearer " + JSON.parse(localStorage.getItem("user")).accessToken
             }
         })
         dispatch(updateMovieSuccess(res.data));
+        return 'success';
     }catch(err){
-        dispatch(updateMovieFailure());
+        if(err && err.response.status===403){
+            return 403
+        }else{
+            dispatch(updateMovieFailure());
+            return 'failure'
+        }
     }
 }

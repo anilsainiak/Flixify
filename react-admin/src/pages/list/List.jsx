@@ -12,6 +12,8 @@ import { MovieContext } from '../../context/movieContext/MovieContext'
 import { getMovies } from '../../context/movieContext/apiCalls'
 import { updateList } from '../../context/listContext/apiCalls';
 import Alert from '@mui/material/Alert';
+import { logoutStart } from '../../context/authContext/apiCalls'
+import { AuthContext } from '../../context/authContext/AuthContext'
 
 export default function List() {
     const location=useLocation();
@@ -19,6 +21,7 @@ export default function List() {
     console.log(list);
     const {dispatch}=useContext(ListContext);
     const {movies,dispatch:dispatchMovie}=useContext(MovieContext);
+    const {dispatch:authDispatch} = useContext(AuthContext);
     const [selected,setSelected] = useState([]);
     const [updatedList,setUpdatedList] = useState(list);
     const [isSuccess,setIsSuccess] = useState(null);
@@ -57,17 +60,18 @@ export default function List() {
 
     const handleSubmit=async(e)=>{
         e.preventDefault();
-        const temp = await updateList(updatedList,dispatch);
-        if(temp==='success'){
+        const result = await updateList(updatedList,dispatch);
+        if(result==='success'){
             setIsSuccess(true);
             setTimeout(()=>{
                 // window.location.reload();
                 setIsSuccess(null);
             },3000)
-        }else{
+        }else if(result==='failure'){
             setIsSuccess(false);
+        }else if(result===403){
+            logoutStart(authDispatch);
         }
-        // updateMovie(updatedMovie,dispatch);
     }
   return (
     <div className="product">

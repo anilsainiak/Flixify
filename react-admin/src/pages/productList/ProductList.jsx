@@ -6,18 +6,27 @@ import { productRows } from '../../dummyData';
 import { Link } from 'react-router-dom';
 import { MovieContext } from '../../context/movieContext/MovieContext';
 import { deleteMovie, getMovies } from '../../context/movieContext/apiCalls';
+import { logoutStart } from '../../context/authContext/apiCalls';
+import { AuthContext } from '../../context/authContext/AuthContext';
 
 export default function ProductList() {
     // const [data,setData]=useState(productRows)
     const {movies,dispatch}=useContext(MovieContext);
+    const {dispatch:authDispatch}=useContext(AuthContext);
 
     useEffect(()=>{
-      getMovies(dispatch);
+      const result = getMovies(dispatch);
+      if(result===403){
+        logoutStart(authDispatch);
+      }
     },[dispatch]);
 
     const handleDelete=(id)=>{
         // setData(data.filter(item=>item.id!==id))
-        deleteMovie(id,dispatch);
+        const result = deleteMovie(id,dispatch);
+        if(result===403){
+          logoutStart(authDispatch);
+        }
     }
     // console.log(movies);
     const columns = [

@@ -6,18 +6,37 @@ import { productRows } from '../../dummyData';
 import { Link } from 'react-router-dom';
 import { ListContext } from '../../context/listContext/ListContext';
 import { deleteList, getLists } from '../../context/listContext/apiCalls';
+import { logoutStart } from '../../context/authContext/apiCalls';
+import { AuthContext } from '../../context/authContext/AuthContext';
+import Alert from '@mui/material/Alert';
 
 export default function ListList() {
     // const [data,setData]=useState(productRows)
     const {lists,dispatch}=useContext(ListContext);
+    const {dispatch:authDispatch}=useContext(AuthContext);
+    const [isSuccess,setIsSuccess] = useState(null);
+
+    const func=async() =>{
+      const result = await getLists(dispatch)
+      console.log('res',result);
+      if(result===403){
+        console.log('ak');
+        logoutStart(authDispatch);
+      }else if(result==='failure'){
+        setIsSuccess(false);
+      }
+    }
 
     useEffect(()=>{
-      getLists(dispatch);
+      func();
     },[dispatch]);
 
     const handleDelete=(id)=>{
         // setData(data.filter(item=>item.id!==id))
-        deleteList(id,dispatch);
+        const result = deleteList(id,dispatch);
+        if(result===403){
+          logoutStart(authDispatch);
+        }
     }
     // console.log(lists);
     const columns = [
@@ -39,6 +58,7 @@ export default function ListList() {
       ];
   return (
     <div className="productList">
+      {isSuccess===false && <Alert severity="error" className='alert'>Failed to Retreive Data</Alert> }
         <DataGrid
         disableRowSelectionOnClick
         rows={lists}

@@ -7,6 +7,7 @@ const userRoute=require("./routes/users");
 const moviesRoute=require("./routes/movies");
 const listsRoute=require("./routes/lists");
 const packageRoute = require('./routes/package');
+const recentlyPlayedRoute = require('./routes/recentlyPlayed');
 var cors = require('cors')
 
 app.use(cors())
@@ -27,6 +28,7 @@ app.use("/api/users",userRoute);
 app.use("/api/movie",moviesRoute);
 app.use("/api/lists",listsRoute);
 app.use('/api/package',packageRoute);
+app.use('/api/recentlyPlayed',recentlyPlayedRoute);
 
 
 app.listen(8800,()=>{

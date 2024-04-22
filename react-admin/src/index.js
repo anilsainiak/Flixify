@@ -14,7 +14,7 @@ root.render(
     <ListContextProvider>
 
     <Router>
-    <App />
+    <App/>
     </Router>
     
     </ListContextProvider>

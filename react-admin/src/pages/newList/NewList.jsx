@@ -9,6 +9,8 @@ import { getMovies } from '../../context/movieContext/apiCalls';
 import {MultiSelect} from 'react-multi-select-component'
 import { createList } from '../../context/listContext/apiCalls';
 import Alert from '@mui/material/Alert';
+import { logoutStart } from '../../context/authContext/apiCalls';
+import { AuthContext } from '../../context/authContext/AuthContext';
 
 export default function NewList() {
     const [list,setList]=useState(null);
@@ -16,6 +18,7 @@ export default function NewList() {
     const {movies,dispatch:dispatchMovie}=useContext(MovieContext);
     const [selected,setSelected] = useState([]);
     const [isSuccess,setIsSuccess] = useState(null);
+    const {dispatch:authDispatch}=useContext(AuthContext);
 
     useEffect(()=>{
         getMovies(dispatchMovie);
@@ -32,14 +35,16 @@ export default function NewList() {
     
     const handleSubmit=async (e)=>{
         e.preventDefault();
-        const temp = await createList(list,dispatch);
-        if(temp==='success'){
+        const result = await createList(list,dispatch);
+        if(result==='success'){
             setIsSuccess(true);
             setTimeout(()=>{
                 window.location.reload();
             },3000)
-        }else{
+        }else if(result==='failure'){
             setIsSuccess(false);
+        }else if(result===403){
+            logoutStart(authDispatch);
         }
     }
 

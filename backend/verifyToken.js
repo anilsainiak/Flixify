@@ -9,7 +9,7 @@ function verify(req,res,next){
             
             if(err) {
                 // console.log(err);
-                res.status(403).json("Invalid Token");
+                return res.status(403).json("Invalid Token");
             }
             req.user=user;
             next();

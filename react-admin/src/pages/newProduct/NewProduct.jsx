@@ -5,6 +5,8 @@ import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "firebase/
 import { createMovie } from '../../context/movieContext/apiCalls';
 import { MovieContext } from '../../context/movieContext/MovieContext';
 import Alert from '@mui/material/Alert';
+import { logoutStart } from '../../context/authContext/apiCalls';
+import { AuthContext } from '../../context/authContext/AuthContext';
 
 export default function NewProduct() {
     const [movie,setMovie]=useState({'isSeries':'no'});
@@ -17,6 +19,7 @@ export default function NewProduct() {
     const {dispatch}=useContext(MovieContext);
     const [isLoading,setIsLoading] = useState(false);
     const [isSuccess,setIsSuccess] = useState(null);
+    const {dispatch:authDispatch} = useContext(AuthContext);
 
     const handleChange=(e)=>{
         const value=e.target.value;
@@ -82,14 +85,16 @@ export default function NewProduct() {
     
     const handleSubmit=async(e)=>{
         e.preventDefault();
-        const temp =await createMovie(movie,dispatch);
-        if(temp==='success'){
+        const result =await createMovie(movie,dispatch);
+        if(result==='success'){
             setIsSuccess(true);
             setTimeout(()=>{
                 window.location.reload();
             },3000)
-        }else{
+        }else if(result==='failure'){
             setIsSuccess(false);
+        }else if(result===403){
+            logoutStart(authDispatch);
         }
     }
 
