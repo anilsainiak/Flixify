@@ -49,9 +49,9 @@ router.post("/login", async (req,res)=>{
         !user && res.status(401).json("Wrong Username");
 
         const originalpass=CryptoJS.AES.decrypt(user.password,process.env.SECRET_KEY).toString(CryptoJS.enc.Utf8);
-
-        originalpass!==req.body.password && res.status(401).json("Wrong Password");
-
+        if(originalpass!==req.body.password){
+            return res.status(401).json("Wrong Password");
+        }
         const accessToken=jwt.sign({id:user._id,isAdmin:user.isAdmin},process.env.SECRET_KEY,{expiresIn:"12h"});
 
         const {password, ...info}=user._doc;
@@ -79,7 +79,8 @@ router.post('/forgotPassword',async(req,res,next)=>{
                     to:email,
                     from:process.env.EMAIL,
                     subject:'RESET PASSWORD',
-                    html:`<h1>You have requested for password reset </h1>   <p> To reset <a href="http://localhost:3001/newPassword/${token}">click here</a> </p>`
+                    // html:`<h1>You have requested for password reset </h1>   <p> To reset <a href="http://localhost:3001/newPassword/${token}">click here</a> </p>`
+                    html:`<h1>You have requested for password reset </h1><p> To reset <a href="https://netflixify.vercel.app/newPassword/${token}">click here</a> </p>`
                 })
             }
         })

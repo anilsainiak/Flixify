@@ -57,6 +57,8 @@ router.post('/checkout', async (req,res,next)=>{
             mode:'payment',
             success_url:'https://netflixify.vercel.app/paymentSuccess',
             cancel_url:'https://netflixify.vercel.app/paymentCancel',    
+            // success_url:'http://localhost:3001/paymentSuccess',
+            // cancel_url:'http://localhost:3001/paymentCancel',   
         });
         res.status(200).json({id:session.id});
     }catch(err){
